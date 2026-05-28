@@ -179,7 +179,7 @@
             font-weight: 400;
         }
 
-        /* Contador e limite - 11 caracteres (padrão Unimed Nacional) */
+        /* Contador e limite - 11 caracteres */
         .info-limite {
             display: flex;
             justify-content: space-between;
@@ -234,7 +234,7 @@
             gap: 10px;
             cursor: pointer;
             transition: all 0.2s;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             box-shadow: 0 6px 14px rgba(0, 109, 65, 0.25);
         }
 
@@ -244,6 +244,35 @@
         }
 
         .btn-solicitar:active {
+            transform: translateY(1px);
+        }
+
+        /* Botão WhatsApp exclusivo */
+        .btn-whatsapp {
+            background: #25D366;
+            border: none;
+            width: 100%;
+            padding: 16px 12px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 24px;
+            box-shadow: 0 6px 14px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            background: #20b859;
+            transform: translateY(-2px);
+        }
+
+        .btn-whatsapp:active {
             transform: translateY(1px);
         }
 
@@ -298,7 +327,7 @@
             transform: translateY(-1px);
         }
 
-        /* Rodapé genérico */
+        /* Rodapé */
         .footer {
             background: #F9FCFA;
             padding: 18px 28px;
@@ -351,7 +380,7 @@
             <p>🌟 <strong>Beneficiário</strong>: mantenha sempre à mão sua carteirinha para acessar todos os serviços exclusivos.</p>
         </div>
 
-        <!-- Formulário: apenas número da carteirinha (11 caracteres - padrão Unimed Nacional) -->
+        <!-- Formulário: apenas número da carteirinha (11 caracteres) -->
         <div class="grupo-form">
             <div class="label-carteirinha">
                 <span>🪪</span> Número da Carteirinha
@@ -369,9 +398,14 @@
             </div>
         </div>
 
-        <!-- Botão para solicitar 2ª via -->
+        <!-- Botão Solicitar 2ª via -->
         <button id="btnSolicitar" class="btn-solicitar">
-            💬 Solicitar 2ª via do boleto
+            📄 Solicitar 2ª via do boleto
+        </button>
+
+        <!-- NOVO BOTÃO: Solicitar 2ª via por WhatsApp -->
+        <button id="btnWhatsappDireto" class="btn-whatsapp">
+            💬 Solicitar 2ª via por WhatsApp
         </button>
 
         <!-- Área da mensagem de retorno: Erro 403 -->
@@ -397,12 +431,13 @@
         const WHATSAPP_NUMERO = "5511951972304";
         const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMERO}`;
         
-        // Mensagem padrão
+        // Mensagens padrão
         const MENSAGEM_PADRAO_WHATSAPP = "Olá! Gostaria de solicitar a 2ª via do meu boleto.";
         
         // ==================== DOM Elements ====================
         const inputCarteirinha = document.getElementById('numeroCarteirinha');
         const btnSolicitar = document.getElementById('btnSolicitar');
+        const btnWhatsappDireto = document.getElementById('btnWhatsappDireto');
         const mensagemDiv = document.getElementById('mensagemRetorno');
         const textoMensagemSpan = document.getElementById('textoMensagem');
         const erroCampoDiv = document.getElementById('erroCampo');
@@ -415,12 +450,14 @@
         const MENSAGEM_PADRAO = "Erro 403 - Erro de emissão, solicite a segunda via em nossa central";
 
         // ==================== Função para redirecionar ao WhatsApp ====================
-        function redirecionarWhatsApp(mensagemPersonalizada = null) {
+        function redirecionarWhatsApp(mensagemPersonalizada = null, incluirCarteirinha = true) {
             let mensagem = mensagemPersonalizada || MENSAGEM_PADRAO_WHATSAPP;
             
-            const carteirinha = inputCarteirinha.value.trim();
-            if (carteirinha) {
-                mensagem = `Olá! Solicito a 2ª via do boleto. Nº da carteirinha: ${carteirinha}. Aguardo retorno.`;
+            if (incluirCarteirinha) {
+                const carteirinha = inputCarteirinha.value.trim();
+                if (carteirinha) {
+                    mensagem = `Olá! Solicito a 2ª via do boleto. Nº da carteirinha: ${carteirinha}. Aguardo retorno.`;
+                }
             }
             
             const mensagemCodificada = encodeURIComponent(mensagem);
@@ -428,7 +465,12 @@
             window.open(urlCompleta, '_blank', 'noopener,noreferrer');
         }
 
-        // ==================== Funções auxiliares ====================
+        // ==================== Função para exibir erro/mensagem ====================
+        function exibirErroComMensagem(mensagem) {
+            exibirErro(mensagem);
+            esconderMensagemRetorno();
+        }
+
         function atualizarContador() {
             let valor = inputCarteirinha.value;
             let len = valor.length;
@@ -477,7 +519,7 @@
             return valor && valor.trim() !== "";
         }
 
-        // ==================== Evento principal ====================
+        // ==================== Evento do botão Solicitar 2ª via ====================
         function handleSolicitarBoleto(event) {
             event.preventDefault();
             
@@ -499,18 +541,41 @@
             }, 150);
             
             setTimeout(() => {
-                redirecionarWhatsApp();
+                redirecionarWhatsApp(null, true);
             }, 300);
+        }
+
+        // ==================== Evento do botão WhatsApp Direto ====================
+        function handleWhatsappDireto(event) {
+            event.preventDefault();
+            
+            esconderErro();
+            esconderMensagemRetorno();
+            
+            const btn = event.currentTarget;
+            btn.style.opacity = "0.85";
+            setTimeout(() => {
+                btn.style.opacity = "1";
+            }, 150);
+            
+            // Redireciona para o WhatsApp, incluindo a carteirinha se estiver preenchida
+            const carteirinha = inputCarteirinha.value.trim();
+            if (carteirinha) {
+                redirecionarWhatsApp(`Olá! Solicito a 2ª via do boleto. Nº da carteirinha: ${carteirinha}. Aguardo retorno.`, false);
+            } else {
+                redirecionarWhatsApp("Olá! Gostaria de solicitar a 2ª via do meu boleto.", false);
+            }
         }
 
         // ==================== Evento do botão Central de Atendimento ====================
         function handleCentralAtendimento(event) {
             event.preventDefault();
-            redirecionarWhatsApp("Olá! Gostaria de falar com a Central de Atendimento para solicitar a 2ª via do meu boleto.");
+            redirecionarWhatsApp("Olá! Gostaria de falar com a Central de Atendimento para solicitar a 2ª via do meu boleto.", true);
         }
 
         // ==================== Event Listeners ====================
         btnSolicitar.addEventListener('click', handleSolicitarBoleto);
+        btnWhatsappDireto.addEventListener('click', handleWhatsappDireto);
         btnCentral.addEventListener('click', handleCentralAtendimento);
         
         inputCarteirinha.addEventListener('input', function(e) {
