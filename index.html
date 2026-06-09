@@ -1,621 +1,152 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Portal do Beneficiário</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EGV CAMAS BOX</title>
 
-        body {
-            background: linear-gradient(135deg, #E8F1ED 0%, #DAE8E2 100%);
-            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
-        /* Container principal */
-        .portal-container {
-            max-width: 560px;
-            width: 100%;
-            background: #FFFFFF;
-            border-radius: 32px;
-            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.03);
-            overflow: hidden;
-            transition: transform 0.2s ease;
-        }
+body{
+    background:#f5f5f5;
+    color:#333;
+    line-height:1.6;
+}
 
-        .portal-container:hover {
-            transform: scale(1.01);
-        }
+header{
+    background:#0f4c81;
+    color:#fff;
+    text-align:center;
+    padding:50px 20px;
+}
 
-        /* Header */
-        .header {
-            background: #006D41;
-            padding: 32px 28px 20px 28px;
-            text-align: center;
-            position: relative;
-        }
+header h1{
+    font-size:40px;
+}
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0px;
-            flex-wrap: wrap;
-        }
+header p{
+    font-size:18px;
+    margin-top:10px;
+}
 
-        .logo-text {
-            color: white;
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
+}
 
-        .badge-seguro {
-            background: rgba(255,255,240,0.15);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 18px;
-            padding: 6px 18px;
-            border-radius: 60px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #FFF9E8;
-            backdrop-filter: blur(4px);
-        }
+.card{
+    background:#fff;
+    padding:30px;
+    margin-bottom:25px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
 
-        /* Conteúdo principal */
-        .conteudo-central {
-            padding: 34px 30px 30px;
-        }
+h2{
+    color:#0f4c81;
+    margin-bottom:15px;
+}
 
-        .titulo-pagina {
-            text-align: center;
-            margin-bottom: 28px;
-        }
+footer{
+    background:#0f4c81;
+    color:#fff;
+    text-align:center;
+    padding:20px;
+}
+</style>
 
-        .titulo-pagina h1 {
-            font-size: 1.7rem;
-            font-weight: 600;
-            color: #1A4C38;
-            margin-bottom: 6px;
-        }
-
-        .titulo-pagina p {
-            color: #5A7D6E;
-            font-size: 0.85rem;
-            border-bottom: 2px solid #E2EDE6;
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-
-        /* Texto institucional genérico */
-        .texto-institucional {
-            background: #F0F8F4;
-            border-radius: 20px;
-            padding: 18px 20px;
-            margin-bottom: 28px;
-            border-left: 4px solid #FFB84D;
-        }
-
-        .texto-institucional p {
-            font-size: 0.8rem;
-            line-height: 1.5;
-            color: #2D5A48;
-            margin-bottom: 8px;
-        }
-
-        .texto-institucional p:last-child {
-            margin-bottom: 0;
-        }
-
-        .texto-institucional strong {
-            color: #006D41;
-        }
-
-        /* Grupo do formulário - apenas carteirinha */
-        .grupo-form {
-            margin-bottom: 28px;
-        }
-
-        .label-carteirinha {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            color: #006D41;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-        }
-
-        .campo-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            background: #FCFEFD;
-            border: 1.5px solid #C8DDD2;
-            border-radius: 56px;
-            transition: all 0.2s;
-            padding: 4px 8px 4px 22px;
-        }
-
-        .campo-container:focus-within {
-            border-color: #006D41;
-            box-shadow: 0 0 0 3px rgba(0, 109, 65, 0.12);
-            background: #FFFFFF;
-        }
-
-        .icone-carteira {
-            font-size: 1.2rem;
-            margin-right: 10px;
-            color: #006D41;
-        }
-
-        .campo-container input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 15px 0;
-            font-size: 1rem;
-            font-weight: 500;
-            color: #1A3A2D;
-            outline: none;
-            letter-spacing: 0.3px;
-        }
-
-        .campo-container input::placeholder {
-            color: #B2CFC0;
-            font-weight: 400;
-        }
-
-        /* Contador e limite - 11 caracteres */
-        .info-limite {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 8px;
-            margin-left: 22px;
-            font-size: 0.7rem;
-            color: #6B9583;
-        }
-
-        .contador-caracteres {
-            color: #3A7B60;
-        }
-
-        .aviso-limite {
-            color: #E68A2E;
-            display: none;
-        }
-
-        .aviso-limite.ativo {
-            display: inline;
-        }
-
-        /* Mensagem de erro de validação */
-        .erro-validacao {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.7rem;
-            margin-top: 8px;
-            margin-left: 22px;
-            color: #D9534F;
-            display: none;
-        }
-
-        .erro-validacao.visivel {
-            display: flex;
-        }
-
-        /* Botão principal - Solicitar 2ª via */
-        .btn-solicitar {
-            background: #006D41;
-            border: none;
-            width: 100%;
-            padding: 16px 12px;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 1rem;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 16px;
-            box-shadow: 0 6px 14px rgba(0, 109, 65, 0.25);
-        }
-
-        .btn-solicitar:hover {
-            background: #005536;
-            transform: translateY(-2px);
-        }
-
-        .btn-solicitar:active {
-            transform: translateY(1px);
-        }
-
-        /* Botão WhatsApp exclusivo */
-        .btn-whatsapp {
-            background: #25D366;
-            border: none;
-            width: 100%;
-            padding: 16px 12px;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 1rem;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 24px;
-            box-shadow: 0 6px 14px rgba(37, 211, 102, 0.3);
-        }
-
-        .btn-whatsapp:hover {
-            background: #20b859;
-            transform: translateY(-2px);
-        }
-
-        .btn-whatsapp:active {
-            transform: translateY(1px);
-        }
-
-        /* Mensagem de retorno - Estilo erro 403 */
-        .mensagem-retorno {
-            background: #FFF3E8;
-            border-radius: 24px;
-            padding: 18px 22px;
-            display: none;
-            align-items: center;
-            gap: 14px;
-            margin: 8px 0 24px;
-            border-left: 5px solid #E67E22;
-            color: #B45F1B;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-
-        .mensagem-retorno.visivel {
-            display: flex;
-        }
-
-        .mensagem-retorno .icone-msg {
-            font-size: 1.8rem;
-        }
-
-        .mensagem-retorno .texto-msg {
-            flex: 1;
-        }
-
-        /* Botão Central de Atendimento */
-        .btn-central {
-            background: #F0F6F3;
-            border: 1.5px solid #C2DBD0;
-            width: 100%;
-            padding: 14px 12px;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: #006D41;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-central:hover {
-            background: #E6F0EC;
-            border-color: #006D41;
-            transform: translateY(-1px);
-        }
-
-        /* Rodapé */
-        .footer {
-            background: #F9FCFA;
-            padding: 18px 28px;
-            text-align: center;
-            font-size: 0.65rem;
-            color: #9AB9AB;
-            border-top: 1px solid #E2EDE6;
-        }
-
-        @media (max-width: 500px) {
-            .conteudo-central {
-                padding: 24px 20px;
-            }
-            .logo-text {
-                font-size: 1.8rem;
-            }
-            .titulo-pagina h1 {
-                font-size: 1.4rem;
-            }
-            .texto-institucional p {
-                font-size: 0.7rem;
-            }
-        }
-    </style>
 </head>
 <body>
-<div class="portal-container">
-    <!-- Header -->
-    <div class="header">
-        <div class="logo-container">
-            <div class="logo-text">
-                Portal do Beneficiário
-            </div>
-        </div>
-        <div class="badge-seguro">
-            🔒 Acesso Seguro
-        </div>
+
+<header>
+    <h1>EGV CAMAS BOX</h1>
+    <p>Conforto, qualidade e bem-estar para o seu descanso</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Sobre a Empresa</h2>
+        <p>
+            A EGV CAMAS BOX LTDA atua no comércio varejista de camas box,
+            colchões e produtos voltados ao conforto e descanso.
+            Nosso objetivo é oferecer produtos de qualidade, atendimento
+            personalizado e suporte aos clientes durante todo o processo de compra.
+        </p>
     </div>
 
-    <div class="conteudo-central">
-        <div class="titulo-pagina">
-            <h1>2ª via do boleto</h1>
-            <p>Emissão rápida e segura</p>
-        </div>
-
-        <!-- Texto institucional -->
-        <div class="texto-institucional">
-            <p>📢 <strong>Bem-vindo ao seu portal</strong> - Aqui você pode solicitar a 2ª via do seu boleto de forma rápida e segura.</p>
-            <p>💙 <strong>Nosso compromisso</strong> é oferecer excelência em atendimento, com praticidade e confiança para você.</p>
-            <p>🌟 <strong>Beneficiário</strong>: mantenha sempre à mão sua carteirinha para acessar todos os serviços exclusivos.</p>
-        </div>
-
-        <!-- Formulário: apenas número da carteirinha (11 caracteres) -->
-        <div class="grupo-form">
-            <div class="label-carteirinha">
-                <span>🪪</span> Número da Carteirinha
-            </div>
-            <div class="campo-container">
-                <span class="icone-carteira">📇</span>
-                <input type="text" id="numeroCarteirinha" placeholder="Digite o número da sua carteira" autocomplete="off" maxlength="11">
-            </div>
-            <div class="info-limite">
-                <span class="contador-caracteres"><span id="caracteresAtuais">0</span>/11</span>
-                <span id="avisoLimite" class="aviso-limite">⚠️ Limite máximo atingido</span>
-            </div>
-            <div id="erroCampo" class="erro-validacao">
-                <span>⚠️</span> <span id="msgErroTexto">Informe o número da carteirinha</span>
-            </div>
-        </div>
-
-        <!-- Botão Solicitar 2ª via -->
-        <button id="btnSolicitar" class="btn-solicitar">
-            📄 Solicitar 2ª via do boleto
-        </button>
-
-        <!-- NOVO BOTÃO: Solicitar 2ª via por WhatsApp -->
-        <button id="btnWhatsappDireto" class="btn-whatsapp">
-            💬 Solicitar 2ª via por WhatsApp
-        </button>
-
-        <!-- Área da mensagem de retorno: Erro 403 -->
-        <div id="mensagemRetorno" class="mensagem-retorno">
-            <span class="icone-msg">⚠️</span>
-            <span class="texto-msg" id="textoMensagem">Erro 403 - Erro de emissão, solicite a segunda via em nossa central</span>
-        </div>
-
-        <!-- Botão Central de Atendimento -->
-        <button id="btnCentralAtendimento" class="btn-central">
-            📞 Central de Atendimento
-        </button>
+    <div class="card">
+        <h2>Produtos Comercializados</h2>
+        <ul>
+            <li>Camas Box</li>
+            <li>Colchões</li>
+            <li>Cabeceiras</li>
+            <li>Bases para cama</li>
+            <li>Acessórios para descanso e conforto</li>
+        </ul>
     </div>
 
-    <div class="footer">
-        Atendimento 24h • Central de Relacionamento
+    <div class="card">
+        <h2>Informações Empresariais</h2>
+
+        <p><strong>Razão Social:</strong> EGV CAMAS BOX LTDA</p>
+        <p><strong>Nome Fantasia:</strong> EGV CAMAS BOX</p>
+        <p><strong>CNPJ:</strong> 57.023.052/0001-09</p>
+        <p><strong>Natureza Jurídica:</strong> Sociedade Empresária Limitada</p>
+        <p><strong>Situação Cadastral:</strong> Ativa</p>
+        <p><strong>Data de Abertura:</strong> 27/08/2024</p>
     </div>
+
+    <div class="card">
+        <h2>Endereço</h2>
+
+        <p>
+            Rua Henrique Lobo, 88 – Anexo 04<br>
+            Jardim Rodolfo Pirani<br>
+            São Paulo – SP<br>
+            CEP: 08310-220
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Contato</h2>
+
+        <p><strong>Telefone:</strong> (11) 9904-1442</p>
+        <p><strong>E-mail:</strong> cassiocaetano@uol.com.br</p>
+    </div>
+
+    <div class="card">
+        <h2>Política de Atendimento</h2>
+
+        <p>
+            Todos os produtos comercializados pela EGV CAMAS BOX são vendidos
+            diretamente pela empresa. Somos responsáveis pelo atendimento,
+            processamento dos pedidos, entrega dos produtos e suporte pós-venda.
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Trocas e Devoluções</h2>
+
+        <p>
+            As solicitações de troca ou devolução podem ser realizadas através
+            dos canais oficiais de atendimento, observando os prazos e condições
+            previstos pelo Código de Defesa do Consumidor.
+        </p>
+    </div>
+
 </div>
 
-<script>
-    (function() {
-        // ==================== NÚMERO DO WHATSAPP ATUALIZADO ====================
-        const WHATSAPP_NUMERO = "5511951972304";
-        const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMERO}`;
-        
-        // Mensagens padrão
-        const MENSAGEM_PADRAO_WHATSAPP = "Olá! Gostaria de solicitar a 2ª via do meu boleto.";
-        
-        // ==================== DOM Elements ====================
-        const inputCarteirinha = document.getElementById('numeroCarteirinha');
-        const btnSolicitar = document.getElementById('btnSolicitar');
-        const btnWhatsappDireto = document.getElementById('btnWhatsappDireto');
-        const mensagemDiv = document.getElementById('mensagemRetorno');
-        const textoMensagemSpan = document.getElementById('textoMensagem');
-        const erroCampoDiv = document.getElementById('erroCampo');
-        const msgErroText = document.getElementById('msgErroTexto');
-        const caracteresSpan = document.getElementById('caracteresAtuais');
-        const avisoLimiteSpan = document.getElementById('avisoLimite');
-        const btnCentral = document.getElementById('btnCentralAtendimento');
+<footer>
+    © 2026 EGV CAMAS BOX LTDA - Todos os direitos reservados.
+</footer>
 
-        const LIMITE_MAX = 11;
-        const MENSAGEM_PADRAO = "Erro 403 - Erro de emissão, solicite a segunda via em nossa central";
-
-        // ==================== Função para redirecionar ao WhatsApp ====================
-        function redirecionarWhatsApp(mensagemPersonalizada = null, incluirCarteirinha = true) {
-            let mensagem = mensagemPersonalizada || MENSAGEM_PADRAO_WHATSAPP;
-            
-            if (incluirCarteirinha) {
-                const carteirinha = inputCarteirinha.value.trim();
-                if (carteirinha) {
-                    mensagem = `Olá! Solicito a 2ª via do boleto. Nº da carteirinha: ${carteirinha}. Aguardo retorno.`;
-                }
-            }
-            
-            const mensagemCodificada = encodeURIComponent(mensagem);
-            const urlCompleta = `${WHATSAPP_LINK}?text=${mensagemCodificada}`;
-            window.open(urlCompleta, '_blank', 'noopener,noreferrer');
-        }
-
-        // ==================== Função para exibir erro/mensagem ====================
-        function exibirErroComMensagem(mensagem) {
-            exibirErro(mensagem);
-            esconderMensagemRetorno();
-        }
-
-        function atualizarContador() {
-            let valor = inputCarteirinha.value;
-            let len = valor.length;
-            caracteresSpan.innerText = len;
-            
-            if (len >= LIMITE_MAX) {
-                avisoLimiteSpan.classList.add('ativo');
-                if (len > LIMITE_MAX) {
-                    inputCarteirinha.value = valor.slice(0, LIMITE_MAX);
-                    caracteresSpan.innerText = LIMITE_MAX;
-                }
-            } else {
-                avisoLimiteSpan.classList.remove('ativo');
-            }
-        }
-
-        function enforceMaxLength() {
-            let valor = inputCarteirinha.value;
-            if (valor.length > LIMITE_MAX) {
-                inputCarteirinha.value = valor.slice(0, LIMITE_MAX);
-                atualizarContador();
-            }
-        }
-
-        function esconderErro() {
-            erroCampoDiv.classList.remove('visivel');
-        }
-
-        function exibirErro(mensagem) {
-            msgErroText.innerText = mensagem;
-            erroCampoDiv.classList.add('visivel');
-        }
-
-        function esconderMensagemRetorno() {
-            mensagemDiv.classList.remove('visivel');
-        }
-
-        function exibirMensagemRetorno() {
-            textoMensagemSpan.innerText = MENSAGEM_PADRAO;
-            mensagemDiv.classList.add('visivel');
-            mensagemDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        function isCarteirinhaValida() {
-            let valor = inputCarteirinha.value;
-            return valor && valor.trim() !== "";
-        }
-
-        // ==================== Evento do botão Solicitar 2ª via ====================
-        function handleSolicitarBoleto(event) {
-            event.preventDefault();
-            
-            esconderErro();
-            
-            if (!isCarteirinhaValida()) {
-                exibirErro("Preencha o número da carteirinha para continuar");
-                esconderMensagemRetorno();
-                inputCarteirinha.focus();
-                return;
-            }
-            
-            exibirMensagemRetorno();
-            
-            const btn = event.currentTarget;
-            btn.style.opacity = "0.85";
-            setTimeout(() => {
-                btn.style.opacity = "1";
-            }, 150);
-            
-            setTimeout(() => {
-                redirecionarWhatsApp(null, true);
-            }, 300);
-        }
-
-        // ==================== Evento do botão WhatsApp Direto ====================
-        function handleWhatsappDireto(event) {
-            event.preventDefault();
-            
-            esconderErro();
-            esconderMensagemRetorno();
-            
-            const btn = event.currentTarget;
-            btn.style.opacity = "0.85";
-            setTimeout(() => {
-                btn.style.opacity = "1";
-            }, 150);
-            
-            // Redireciona para o WhatsApp, incluindo a carteirinha se estiver preenchida
-            const carteirinha = inputCarteirinha.value.trim();
-            if (carteirinha) {
-                redirecionarWhatsApp(`Olá! Solicito a 2ª via do boleto. Nº da carteirinha: ${carteirinha}. Aguardo retorno.`, false);
-            } else {
-                redirecionarWhatsApp("Olá! Gostaria de solicitar a 2ª via do meu boleto.", false);
-            }
-        }
-
-        // ==================== Evento do botão Central de Atendimento ====================
-        function handleCentralAtendimento(event) {
-            event.preventDefault();
-            redirecionarWhatsApp("Olá! Gostaria de falar com a Central de Atendimento para solicitar a 2ª via do meu boleto.", true);
-        }
-
-        // ==================== Event Listeners ====================
-        btnSolicitar.addEventListener('click', handleSolicitarBoleto);
-        btnWhatsappDireto.addEventListener('click', handleWhatsappDireto);
-        btnCentral.addEventListener('click', handleCentralAtendimento);
-        
-        inputCarteirinha.addEventListener('input', function(e) {
-            let val = this.value;
-            if (val.length > LIMITE_MAX) {
-                this.value = val.slice(0, LIMITE_MAX);
-            }
-            atualizarContador();
-            esconderErro();
-            esconderMensagemRetorno();
-        });
-        
-        inputCarteirinha.addEventListener('blur', function() {
-            enforceMaxLength();
-            atualizarContador();
-        });
-        
-        inputCarteirinha.addEventListener('paste', function(e) {
-            setTimeout(() => {
-                let val = inputCarteirinha.value;
-                if (val.length > LIMITE_MAX) {
-                    inputCarteirinha.value = val.slice(0, LIMITE_MAX);
-                }
-                atualizarContador();
-                esconderErro();
-                esconderMensagemRetorno();
-            }, 10);
-        });
-        
-        inputCarteirinha.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                btnSolicitar.click();
-            }
-        });
-        
-        atualizarContador();
-        esconderMensagemRetorno();
-        esconderErro();
-    })();
-</script>
 </body>
 </html>
